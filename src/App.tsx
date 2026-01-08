@@ -1,6 +1,6 @@
 export default function App() {
   const name = "사랑하는\n정인영\n여사님";
-  const title = "93세 \n생신 파티\n초대장";
+  const title = "93세\n생신 파티\n초대장";
 
   const dateLine1 = "2026년 1월 11일(일) 오전 11시";
   const venue = "쿠우쿠우";
@@ -8,7 +8,6 @@ export default function App() {
   const phone = "010-2681-3448";
 
   const base = import.meta.env.BASE_URL;
-
   const images = {
     topLeft: `${base}img/smile.jpg`,
     topRight: `${base}img/together.jpg`,
@@ -19,24 +18,24 @@ export default function App() {
   const titleLines = title.split("\n");
 
   return (
-    <div className="min-h-screen w-full bg-white flex items-center justify-center px-6 py-10">
-      {/* Card : 전체 폭 키움 */}
+    <div className="min-h-screen w-full bg-white flex justify-center px-4 py-8 sm:px-6 sm:py-10">
+      {/* Card */}
       <div
-        className="w-[620px] max-w-full bg-white"
+        className="w-full max-w-[420px] sm:max-w-[680px] bg-white"
         style={{
           fontFamily:
             'ui-serif, "Noto Serif KR", "Nanum Myeongjo", Georgia, serif',
         }}
       >
-        {/* Grid : 오른쪽 칸을 더 넓게 */}
-        <div className="grid grid-cols-[1fr_1.15fr] gap-x-12 gap-y-10">
-          {/* Name (top-left) */}
-          <div className="flex items-start justify-start pt-1">
-            <h1 className="text-[#7A5A49] font-medium tracking-[0.16em]">
+        {/* ✅ Mobile: 1col / Desktop: 2col */}
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-[1fr_1.15fr] sm:gap-x-12 sm:gap-y-10">
+          {/* Name */}
+          <div className="text-center sm:text-left">
+            <h1 className="text-[#7A5A49] font-medium tracking-[0.14em]">
               {nameLines.map((line, idx) => (
                 <div
                   key={idx}
-                  className="text-[48px] leading-[1.22] font-semibold"
+                  className="text-[38px] leading-[1.15] sm:text-[48px] sm:leading-[1.22]"
                 >
                   {line}
                 </div>
@@ -44,50 +43,53 @@ export default function App() {
             </h1>
           </div>
 
-          {/* ✅ Top-right: 칸도 넓고, 사진도 큰 가로형 */}
+          {/* Top-right photo */}
           <PhotoWide src={images.topRight} alt="top-right" />
 
-          {/* Left middle photo : 더 크게 */}
+          {/* Left photo */}
           <PhotoSquare src={images.topLeft} alt="top-left" />
 
-          {/* Title (3줄) : 줄 겹침 방지 + 약간 큼 */}
+          {/* Title */}
           <div className="flex items-center justify-center">
             <div className="text-[#7A5A49] font-extrabold text-center tracking-[-0.02em]">
-              <div className="text-[70px] leading-[1.05]">{titleLines[0]}</div>
-              <div className="text-[70px] leading-[1.05] mt-4">
-                {titleLines[1]}
-              </div>
-              <div className="text-[70px] leading-[1.05] mt-4">
-                {titleLines[2]}
-              </div>
+              {titleLines.map((line, idx) => (
+                <div
+                  key={idx}
+                  className="text-[54px] leading-[1.05] sm:text-[70px] sm:leading-[1.05]"
+                  style={{ marginTop: idx === 0 ? 0 : 14 }}
+                >
+                  {line}
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Bottom-left photo : 더 크게 */}
+          {/* Bottom-left photo */}
           <PhotoSquare src={images.bottomLeft} alt="bottom-left" />
 
-          {/* Spacer */}
-          <div />
+          {/* Spacer only on desktop */}
+          <div className="hidden sm:block" />
         </div>
 
-        {/* Footer : 살짝 키움 */}
-        <div className="mt-14 text-center">
-          <div className="text-[20px] text-[#2C2C2C] tracking-[0.02em] leading-relaxed font-sans text-semibold">
+        {/* Footer */}
+        <div className="mt-10 sm:mt-14 text-center">
+          <div className="text-[18px] sm:text-[20px] text-[#2C2C2C] tracking-[0.02em] leading-relaxed">
             {dateLine1}
           </div>
-          <div className="text-[20px] text-[#2C2C2C] mt-2 font-sans text-semibold">
+          <div className="text-[18px] sm:text-[20px] text-[#2C2C2C] mt-2">
             {venue}
           </div>
-          <div className="text-[18px] text-[#2C2C2C] mt-2 font-sans">
+
+          <div className="text-[16px] sm:text-[18px] text-[#2C2C2C] mt-2 font-sans">
             오셔서 함께 축하해 주세요!
           </div>
 
           <div
-            className="mt-4 text-[16px] text-[#555] tracking-[0.08em] leading-relaxed"
+            className="mt-4 text-[14px] sm:text-[16px] text-[#555] tracking-[0.06em] leading-relaxed"
             style={{ fontFamily: 'ui-monospace, "Courier New", monospace' }}
           >
-            <div>{address}</div>
-            <div className="mt-1 font-sans text-semibold">{phone}</div>
+            <div className="px-2">{address}</div>
+            <div className="mt-2">{phone}</div>
           </div>
         </div>
       </div>
@@ -96,10 +98,9 @@ export default function App() {
 }
 
 /* ===================== */
-/* 사진 컴포넌트 */
+/* Photos */
 /* ===================== */
 
-// ✅ topRight: 프레임 자체 확대 + 위로 살짝 뜸
 function PhotoWide({ src, alt }: { src?: string; alt: string }) {
   return (
     <div className="w-full">
@@ -107,19 +108,13 @@ function PhotoWide({ src, alt }: { src?: string; alt: string }) {
         className="
           relative z-0
           transition-transform duration-300 ease-out
-          hover:scale-[1.05] hover:-translate-y-1 hover:z-10
-          active:scale-[1.04]
+          hover:scale-[1.03] hover:-translate-y-1 hover:z-10
+          active:scale-[1.02]
         "
         style={{ WebkitTapHighlightColor: "transparent" }}
       >
-        <div
-          className="
-            aspect-[16/10] w-full bg-[#F3EFEA] overflow-hidden rounded-[22px]
-            shadow-[0_14px_34px_rgba(0,0,0,0.12)]
-            hover:shadow-[0_18px_40px_rgba(0,0,0,0.16)]
-            cursor-pointer
-          "
-        >
+        {/* ✅ 모바일에서 더 크게 보이도록 비율/라운드 조정 */}
+        <div className="aspect-[16/10] sm:aspect-[16/10] w-full bg-[#F3EFEA] overflow-hidden rounded-[18px] sm:rounded-[22px] shadow-[0_14px_34px_rgba(0,0,0,0.12)]">
           <img
             src={src}
             alt={alt}
@@ -132,7 +127,6 @@ function PhotoWide({ src, alt }: { src?: string; alt: string }) {
   );
 }
 
-// ✅ 좌측 사진: 프레임 자체 확대 + 위로 살짝 뜸
 function PhotoSquare({ src, alt }: { src?: string; alt: string }) {
   return (
     <div className="w-full">
@@ -140,19 +134,13 @@ function PhotoSquare({ src, alt }: { src?: string; alt: string }) {
         className="
           relative z-0
           transition-transform duration-300 ease-out
-          hover:scale-[1.05] hover:-translate-y-1 hover:z-10
-          active:scale-[1.04]
+          hover:scale-[1.03] hover:-translate-y-1 hover:z-10
+          active:scale-[1.02]
         "
         style={{ WebkitTapHighlightColor: "transparent" }}
       >
-        <div
-          className="
-            aspect-square w-full bg-[#F3EFEA] overflow-hidden rounded-[20px]
-            shadow-[0_12px_30px_rgba(0,0,0,0.10)]
-            hover:shadow-[0_16px_36px_rgba(0,0,0,0.14)]
-            cursor-pointer
-          "
-        >
+        {/* ✅ 모바일에서 체감 크기 키움 */}
+        <div className="aspect-square w-full bg-[#F3EFEA] overflow-hidden rounded-[18px] sm:rounded-[20px] shadow-[0_12px_30px_rgba(0,0,0,0.10)]">
           <img
             src={src}
             alt={alt}

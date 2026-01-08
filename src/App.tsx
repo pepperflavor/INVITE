@@ -4,7 +4,7 @@ export default function App() {
   const name = "사랑하는\n정인영\n여사님";
   const title = "93세 \n생신 파티\n초대장";
 
-  const dateLine1 = "2026년 1월 1일(일) 오전 11시";
+  const dateLine1 = "2026년 1월 11일(일) 오전 11시";
   const venue = "쿠우쿠우";
   const address = "서울특별시 강동구 천호동 양재대로 1571 홈플러스 지하 1층";
   const phone = "010-2681-3448";

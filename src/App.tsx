@@ -19,7 +19,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen w-full bg-white flex justify-center px-4 py-8 sm:px-6 sm:py-10">
-      {/* Card */}
       <div
         className="w-full max-w-[420px] sm:max-w-[680px] bg-white"
         style={{
@@ -27,23 +26,60 @@ export default function App() {
             'ui-serif, "Noto Serif KR", "Nanum Myeongjo", Georgia, serif',
         }}
       >
-        {/* ✅ Mobile: 1col / Desktop: 2col */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-[1fr_1.15fr] sm:gap-x-12 sm:gap-y-10">
-          {/* Name */}
-          <div className="text-center sm:text-left">
+        {/* ===================== */}
+        {/* ✅ MOBILE (default): 1 column invitation flow */}
+        {/* ===================== */}
+        <div className="sm:hidden space-y-8">
+          {/* 1) Hero wide photo */}
+          <PhotoWide src={images.topRight} alt="top-right" />
+
+          {/* 2) Big title */}
+          <div className="text-center text-[#7A5A49] font-extrabold tracking-[-0.02em]">
+            {titleLines.map((line, idx) => (
+              <div
+                key={idx}
+                className="text-[54px] leading-[1.05]"
+                style={{ marginTop: idx === 0 ? 0 : 14 }}
+              >
+                {line}
+              </div>
+            ))}
+          </div>
+
+          {/* 3) Name */}
+          <div className="text-center">
             <h1 className="text-[#7A5A49] font-medium tracking-[0.14em]">
               {nameLines.map((line, idx) => (
-                <div
-                  key={idx}
-                  className="text-[38px] leading-[1.15] sm:text-[48px] sm:leading-[1.22]"
-                >
+                <div key={idx} className="text-[34px] leading-[1.18]">
                   {line}
                 </div>
               ))}
             </h1>
           </div>
 
-          {/* Top-right photo */}
+          {/* 4) Photo 1 */}
+          <PhotoSquare src={images.topLeft} alt="top-left" />
+
+          {/* 5) Photo 2 */}
+          <PhotoSquare src={images.bottomLeft} alt="bottom-left" />
+        </div>
+
+        {/* ===================== */}
+        {/* ✅ DESKTOP (sm+): keep your 2-column layout */}
+        {/* ===================== */}
+        <div className="hidden sm:grid sm:grid-cols-[1fr_1.15fr] sm:gap-x-12 sm:gap-y-10">
+          {/* Name (top-left) */}
+          <div className="flex items-start justify-start pt-1">
+            <h1 className="text-[#7A5A49] font-medium tracking-[0.16em]">
+              {nameLines.map((line, idx) => (
+                <div key={idx} className="text-[48px] leading-[1.22]">
+                  {line}
+                </div>
+              ))}
+            </h1>
+          </div>
+
+          {/* Top-right wide photo */}
           <PhotoWide src={images.topRight} alt="top-right" />
 
           {/* Left photo */}
@@ -55,8 +91,8 @@ export default function App() {
               {titleLines.map((line, idx) => (
                 <div
                   key={idx}
-                  className="text-[54px] leading-[1.05] sm:text-[70px] sm:leading-[1.05]"
-                  style={{ marginTop: idx === 0 ? 0 : 14 }}
+                  className="text-[70px] leading-[1.05]"
+                  style={{ marginTop: idx === 0 ? 0 : 16 }}
                 >
                   {line}
                 </div>
@@ -67,11 +103,13 @@ export default function App() {
           {/* Bottom-left photo */}
           <PhotoSquare src={images.bottomLeft} alt="bottom-left" />
 
-          {/* Spacer only on desktop */}
-          <div className="hidden sm:block" />
+          {/* Spacer */}
+          <div />
         </div>
 
-        {/* Footer */}
+        {/* ===================== */}
+        {/* Footer (both) */}
+        {/* ===================== */}
         <div className="mt-10 sm:mt-14 text-center">
           <div className="text-[18px] sm:text-[20px] text-[#2C2C2C] tracking-[0.02em] leading-relaxed">
             {dateLine1}
@@ -98,7 +136,7 @@ export default function App() {
 }
 
 /* ===================== */
-/* Photos */
+/* Photos: frame scales (div 자체 확대) */
 /* ===================== */
 
 function PhotoWide({ src, alt }: { src?: string; alt: string }) {
@@ -113,8 +151,7 @@ function PhotoWide({ src, alt }: { src?: string; alt: string }) {
         "
         style={{ WebkitTapHighlightColor: "transparent" }}
       >
-        {/* ✅ 모바일에서 더 크게 보이도록 비율/라운드 조정 */}
-        <div className="aspect-[16/10] sm:aspect-[16/10] w-full bg-[#F3EFEA] overflow-hidden rounded-[18px] sm:rounded-[22px] shadow-[0_14px_34px_rgba(0,0,0,0.12)]">
+        <div className="aspect-[16/10] w-full bg-[#F3EFEA] overflow-hidden rounded-[18px] sm:rounded-[22px] shadow-[0_14px_34px_rgba(0,0,0,0.12)]">
           <img
             src={src}
             alt={alt}
@@ -139,7 +176,6 @@ function PhotoSquare({ src, alt }: { src?: string; alt: string }) {
         "
         style={{ WebkitTapHighlightColor: "transparent" }}
       >
-        {/* ✅ 모바일에서 체감 크기 키움 */}
         <div className="aspect-square w-full bg-[#F3EFEA] overflow-hidden rounded-[18px] sm:rounded-[20px] shadow-[0_12px_30px_rgba(0,0,0,0.10)]">
           <img
             src={src}

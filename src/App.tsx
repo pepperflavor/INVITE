@@ -1,11 +1,11 @@
+import { useEffect, useRef, useState } from "react";
+
 export default function App() {
   const name = "93세\n생신 파티\n초대장";
   const title = "사랑하는\n정인영\n여사님의";
   const phone = "010-2681-3448";
 
   const base = import.meta.env.BASE_URL;
-
-  // public/invite_mv.mp4
   const videoSrc = `${base}invite_mv.mp4`;
 
   const images = {
@@ -17,15 +17,84 @@ export default function App() {
   const nameLines = name.split("\n");
   const titleLines = title.split("\n");
 
+  const heroRef = useRef<HTMLElement | null>(null);
+  const contentRef = useRef<HTMLElement | null>(null);
+
+  // ✅ 스냅은 “영상 구간에서만” 활성화했다가, 내려가면 끔
+  const [snapEnabled, setSnapEnabled] = useState(true);
+
+  // --- (1) 스냅 토글: 상단(영상 근처)에서는 ON, 내려가면 OFF
+  useEffect(() => {
+    const onScroll = () => {
+      // hero 높이의 절반 이상 내려가면 스냅 끄기
+      const y = window.scrollY || 0;
+      const vh = window.innerHeight || 1;
+      setSnapEnabled(y < vh * 0.5);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // --- (2) “다음 섹션으로 부드럽게 이동” 함수
+  const goNext = () => {
+    contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  // --- (3) 모바일 스와이프 감지(영상 섹션에서 위로 스와이프하면 다음 섹션)
+  const touchStartY = useRef<number | null>(null);
+  const touchStartTime = useRef<number | null>(null);
+
+  const onHeroTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+    touchStartTime.current = Date.now();
+  };
+
+  const onHeroTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartY.current == null) return;
+
+    const endY = e.changedTouches[0].clientY;
+    const delta = touchStartY.current - endY; // 위로 스와이프면 +
+    const dt = touchStartTime.current ? Date.now() - touchStartTime.current : 9999;
+
+    touchStartY.current = null;
+    touchStartTime.current = null;
+
+    // ✅ 너무 짧은 터치/약한 스와이프는 무시
+    // 위로 70px 이상 + 700ms 이내면 다음 섹션 이동
+    if (delta > 70 && dt < 700) {
+      goNext();
+    }
+  };
+
+  // --- (4) 데스크톱 휠(영상 섹션에서 아래로 휠 내리면 다음 섹션)
+  const onHeroWheel = (e: React.WheelEvent) => {
+    if (e.deltaY > 10) {
+      goNext();
+    }
+  };
+
   return (
-    // ✅ 스냅: 세로 스크롤 섹션 단위로 딱 붙게
-    <div className="w-full bg-white h-[100dvh] overflow-y-auto snap-y snap-mandatory">
+    // ✅ 스냅은 상단에서만 ON → 내려가면 OFF (콘텐츠 끝까지 내려도 위로 안 튐)
+    <div
+      className={[
+        "w-full bg-white",
+        snapEnabled ? "snap-y snap-mandatory" : "", // 내려가면 완전히 스냅 해제
+      ].join(" ")}
+    >
       {/* ===================== */}
-      {/* 1) HERO VIDEO (모바일: 화면 꽉차게 + 안 잘리게) */}
+      {/* 1) HERO VIDEO */}
       {/* ===================== */}
-      <section className="w-full snap-start">
+      <section
+        ref={heroRef}
+        className="w-full snap-start"
+        onTouchStart={onHeroTouchStart}
+        onTouchEnd={onHeroTouchEnd}
+        onWheel={onHeroWheel}
+      >
         <div className="relative w-full h-[100dvh] min-h-[100svh] bg-black overflow-hidden">
-          {/* ✅ 배경: 같은 영상 블러로 여백 자연스럽게 */}
+          {/* 배경 블러 */}
           <video
             src={videoSrc}
             className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-125"
@@ -35,7 +104,7 @@ export default function App() {
             playsInline
           />
 
-          {/* ✅ 전면: 절대 안 잘리게(전체 보이기) */}
+          {/* 전면: 안 잘리게 */}
           <video
             src={videoSrc}
             className="relative z-10 w-full h-full object-contain"
@@ -47,10 +116,10 @@ export default function App() {
             preload="metadata"
           />
 
-          {/* ✅ 아래로 스크롤 안내(선택) */}
+          {/* 안내 */}
           <div className="pointer-events-none absolute bottom-6 left-0 right-0 z-20 flex justify-center">
             <div className="rounded-full bg-black/45 px-4 py-2 text-white text-sm tracking-wide">
-              아래로 스크롤 ↓
+              아래로 스와이프 ↓
             </div>
           </div>
         </div>
@@ -59,7 +128,7 @@ export default function App() {
       {/* ===================== */}
       {/* 2) CONTENT */}
       {/* ===================== */}
-      <section className="w-full snap-start bg-white">
+      <section ref={contentRef} className="w-full snap-start bg-white">
         <div className="w-full flex justify-center px-4 py-10 sm:px-6 sm:py-12">
           <div
             className="w-full max-w-[420px] sm:max-w-[680px]"
@@ -95,7 +164,7 @@ export default function App() {
               </h1>
             </div>
 
-            {/* Photos: 순서대로 */}
+            {/* Photos */}
             <div className="mt-10 space-y-8">
               <MediaCard src={images.topLeft} alt="top-left" aspect="square" />
               <MediaCard src={images.topRight} alt="top-right" aspect="wide" />

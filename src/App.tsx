@@ -1,5 +1,6 @@
 export default function App() {
-  const title = "93세\n생신 파티\n초대장";
+  const name = "93세\n생신 파티\n초대장";
+  const title = "사랑하는\n정인영\n여사님의";
   const phone = "010-2681-3448";
 
   const base = import.meta.env.BASE_URL;
@@ -23,19 +24,18 @@ export default function App() {
       {/* 1) HERO VIDEO (모바일: 화면 꽉차게 + 안 잘리게) */}
       {/* ===================== */}
       <section className="w-full snap-start">
-        {/* ✅ iOS 주소창 변화에도 안정적으로 꽉 차게 */}
         <div className="relative w-full h-[100dvh] min-h-[100svh] bg-black overflow-hidden">
-          {/* 배경(살짝 블러) */}
+          {/* ✅ 배경: 같은 영상 블러로 여백 자연스럽게 */}
           <video
             src={videoSrc}
-            className="absolute inset-0 w-full h-full object-cover blur-xl opacity-35 scale-110"
+            className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-125"
             autoPlay
             loop
             muted
             playsInline
           />
 
-          {/* 전면(안 잘리게: contain) */}
+          {/* ✅ 전면: 절대 안 잘리게(전체 보이기) */}
           <video
             src={videoSrc}
             className="relative z-10 w-full h-full object-contain"
@@ -44,9 +44,10 @@ export default function App() {
             muted
             playsInline
             controls
+            preload="metadata"
           />
 
-          {/* 스크롤 힌트 */}
+          {/* ✅ 아래로 스크롤 안내(선택) */}
           <div className="pointer-events-none absolute bottom-6 left-0 right-0 z-20 flex justify-center">
             <div className="rounded-full bg-black/45 px-4 py-2 text-white text-sm tracking-wide">
               아래로 스크롤 ↓

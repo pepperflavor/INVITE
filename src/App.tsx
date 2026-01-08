@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function App() {
   const name = "사랑하는\n정인영\n여사님";
   const title = "93세 \n생신 파티\n초대장";
